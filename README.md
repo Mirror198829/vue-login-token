@@ -41,7 +41,7 @@ router.beforeEach((to, from, next) => {
   	}else{
 	   next({
 	  	path: '/login',
-    	        query: {redirect: to.fullPath}
+    	        query: {redirect: to.fullPath} //将去的路由path作为参数，便于登录成功后直接跳转到该路由
 	  })	
   	}
  }else{
@@ -79,5 +79,30 @@ axios.interceptors.response.use(
     }
     return Promise.reject(error.response)
 })
+```
+## 三.登陆获取token
+``` javascript
+onSubmitByAccount() {
+	if(this.accountForm.name=='' || this.accountForm.password == ''){
+		this.accountForm.errorMsg="用户名或密码不得为空"
+	}else{
+	  this.$http.post('tokens',{
+	    username:this.accountForm.name,
+	    password:this.accountForm.password
+	  }).then(response=>{
+	    sessionStorage.setItem("user_token",response.data) //保存token
+	    if(this.$route.query.redirect){ 
+	      let path = this.$route.query.redirect
+	      this.$router.push({ path: path })
+	    }else{
+	      this.$router.push({name:'Home'})
+	    }
+	  }).catch(error=>{
+	    this.accountForm.errorMsg="登陆失败！"
+	  }) 
+		//this.isAccountLoading =true;	
+	}
+	return false;
+}
 ```
 
