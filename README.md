@@ -30,5 +30,24 @@ routes: [
                 meta : {  requireAuth :true }
            }
        ]
+     }
+  ]
 ```
-## 二、axios通信验证)
+``` javascript
+router.beforeEach((to, from, next) => {
+ if(to.meta.requireAuth) {    //如果下一个页面的requireAuth是true,则验证token是否存在
+  	if(sessionStorage.getItem("user_token")){
+  	  next()
+  	}else{
+	   next({
+	  	path: '/login',
+    	        query: {redirect: to.fullPath}
+	  })	
+  	}
+ }else{
+  	next()
+ }
+})
+```
+## 二、axios通信验证
+
