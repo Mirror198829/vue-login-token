@@ -50,15 +50,16 @@ export default new Router({
   ]
 })
 ```
+main.js
 ``` javascript
 router.beforeEach((to, from, next) => {
  if(to.meta.requireAuth) {    //如果下一个页面的requireAuth是true,则验证token是否存在
   	if(sessionStorage.getItem("user_token")){
-  	  next()
+  	   next()
   	}else{
 	   next({
 	  	path: '/login',
-    	        query: {redirect: to.fullPath} //将去的路由path作为参数，便于登录成功后直接跳转到该路由
+    	query: {redirect: to.fullPath}
 	  })	
   	}
  }else{
