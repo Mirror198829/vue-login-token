@@ -82,7 +82,7 @@ axios.interceptors.request.use(
 	    return Promise.reject(err)
 })
 ```
-### 响应拦截
+#### 响应拦截
 ``` javascript
 axios.interceptors.response.use(
   response => {
@@ -90,14 +90,33 @@ axios.interceptors.response.use(
   },
   error => { //默认除了2XX之外的都是错误的，就会走这里
     if(error.response){
+      alert(12313)
       switch(error.response.status){
         case 401:
+          Message.error({
+             message: 'Token失效，请重新登陆'
+          })
           sessionStorage.removeItem('user_token') //可能是token过期，清除它
           router.replace({ //跳转到登录页面
-            path: 'login',
+            path: '/Login',
             query: { redirect: router.currentRoute.fullPath } // 将跳转的路由path作为参数，登录成功后跳转到该路由
           })
+          break;
+        case 404:
+          router.replace({ //跳转到登录页面
+            path: '/404'
+          })
+          break;
+        case 500:
+         ElementUI.Message.error({
+             message: '服务器错误'
+         })
+         break;
       }
+    }else{
+      router.replace({ //跳转到登录页面
+        path: '/404'
+      })
     }
     return Promise.reject(error.response)
 })
