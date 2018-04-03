@@ -6,7 +6,7 @@
 //router/index.js，给需要验证的页面添加 meta : {  requireAuth :true } 如下：
 routes: [
     {
-	    path: '',
+	path: '',
         redirect: 'Login'
     },
     {
@@ -21,7 +21,7 @@ routes: [
         path:'/main',
         name:'Main',
         component:Main,
-        meta : { requireAuth :true },
+        meta : { requireAuth :true }, // 添加该字段，表示进入这个路由是需要登录的
         children:[
            {
                 path:'/home',
