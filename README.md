@@ -1,14 +1,28 @@
 # Vue token 登陆鉴权完整方案
 ## 一、路由拦截
-目的：页面跳转时验证是否即将进入的页面需要登陆验证。
-
+目的：页面跳转时验证，确认是否即将进入的页面需要登陆验证。
+router/index.js
 ``` javascript
-//router/index.js，给需要验证的页面添加 meta : {  requireAuth :true } 如下：
-routes: [
+//给需要验证的页面添加 meta : {  requireAuth :true } 如下：
+export default new Router({
+  scrollBehavior (to, from, savedPosition) {          
+    return { x: 0, y: 0 }
+  }, 
+  routes: [
     {
-	path: '',
-        redirect: 'Login'
+	    path: '*',
+        redirect: '404'
     },
+    {
+        path: '',
+        redirect: 'login'
+    },
+    {
+        path:'/404',
+        name:'NotFound',
+        component:NotFound
+    },
+
     {
         path:'/login',
         name:'Login',
@@ -21,17 +35,22 @@ routes: [
         path:'/main',
         name:'Main',
         component:Main,
-        meta : { requireAuth :true }, // 添加该字段，表示进入这个路由是需要登录的
+        meta : { requireAuth :true },
         children:[
            {
                 path:'/home',
                 name:'Home',
                 component: Home,
                 meta : {  requireAuth :true }
-           }
-       ]
-     }
+           }
+            ]
+          }
+
+        ]
+    },
+
   ]
+})
 ```
 ``` javascript
 router.beforeEach((to, from, next) => {
