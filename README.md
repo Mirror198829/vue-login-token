@@ -69,6 +69,7 @@ router.beforeEach((to, from, next) => {
 ```
 ## 二、axios通信验证
 目的：浏览器发送请求时，验证是否有token，是否需要登陆获取token；接收请求时，拦截，如果token过期则重新登陆。
+#### 发送拦截
 ``` javascript
 axios.interceptors.request.use(
 	config => {
@@ -80,6 +81,9 @@ axios.interceptors.request.use(
 	err => {
 	    return Promise.reject(err)
 })
+```
+### 响应拦截
+``` javascript
 axios.interceptors.response.use(
   response => {
     return response
